@@ -25,16 +25,18 @@ https://www.themealdb.com/api.php -->
   <div class="container-fluid">
     <div class="row px-4">
       <!-- class="text-muted" -->
-      <h3 class="display-4">Recipe for <small id="title"></small></h3>
+      <h3 class="display-4">&#8212;Recipe for <small id="title"></small></h3>
     </div>
-    <div class="row" id="picture"></div>
+    <div class="row">
+      <img id="picture"></img>
+    </div>
     <div class="row" id="details">
       <div class="col-sm-4 border border-dark border-1 rounded mt-4 mx-1">
         <div id="instructions">
           <h3 class="display-6">Instructions</h3>
         </div>
         <div>
-          <button class="btn btn-outline-secondary mb-2" id="link">Video tutorial</button>
+          <button class="btn btn-outline-secondary my-2" id="link" href="#">Video tutorial</button>
         </div>
       </div>
       <div class="col-sm-4 border border-dark border-1 rounded mt-4 mr-1" id="ingredients">
@@ -45,7 +47,7 @@ https://www.themealdb.com/api.php -->
         </div>
       </div>
     </div>
-    <div class="row d-sm-inline-flex p-1" id="new-recipe">
+    <div class="row d-sm-inline-flex p-2" id="new-recipe">
       <button class="btn btn-outline-info">Find a different recipe</button>
     </div>
   </div>
@@ -54,21 +56,28 @@ https://www.themealdb.com/api.php -->
   <script>
     /* id, meal name, drink alternate, category, type of cuisine, instructions, thumb img, tags, youtube, ingredient 1 - measure 1, source, img source, date modified*/
 
-    localStorage.clear();
+    // localStorage.clear();
+
+    axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
+          .then((response) => {
+            let currentRecipe = response.data.meals[0];
+            localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
+
+            document.getElementById("title").innerText = currentRecipe.strMeal;
+
+            document.getElementById("picture").src = currentRecipe.strMealThumb;
+            document.getElementById("picture").style.height = "200px";
+            document.getElementById("picture").style.width = "300px";
+
+            document.getElementById("instructions").appendChild(document.createTextNode(currentRecipe.strInstructions));
+
+            // document.getElementById("link").href = currentRecipe.strYoutube;
 
 
-    function updateRecipe() {
-      axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
-            .then(response => {
-              console.log(response.data.idMeal);
-              let currentRecipe = response.data;
-              localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
-              console.log(localStorage);
-            })
-            .catch(error => console.log(error))
-    }
+            console.log(localStorage);
+          })
+          .catch(error => console.log(error))
 
-    updateRecipe();
 
   </script>
 </body>
