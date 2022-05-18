@@ -22,9 +22,55 @@ https://www.themealdb.com/api.php -->
 </head>
 
 <body>
+  <div class="container-fluid">
+    <div class="row px-4">
+      <!-- class="text-muted" -->
+      <h3 class="display-4">Recipe for <small id="title"></small></h3>
+    </div>
+    <div class="row" id="picture"></div>
+    <div class="row" id="details">
+      <div class="col-sm-4 border border-dark border-1 rounded mt-4 mx-1">
+        <div id="instructions">
+          <h3 class="display-6">Instructions</h3>
+        </div>
+        <div>
+          <button class="btn btn-outline-secondary mb-2" id="link">Video tutorial</button>
+        </div>
+      </div>
+      <div class="col-sm-4 border border-dark border-1 rounded mt-4 mr-1" id="ingredients">
+        <div>
+          <h3 class="display-6">Ingredients</h3>
+          <div id="ingredient"></div>
+          <div id="measure"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row d-sm-inline-flex p-1" id="new-recipe">
+      <button class="btn btn-outline-info">Find a different recipe</button>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script></script>
+  <script>
+    /* id, meal name, drink alternate, category, type of cuisine, instructions, thumb img, tags, youtube, ingredient 1 - measure 1, source, img source, date modified*/
+
+    localStorage.clear();
+
+
+    function updateRecipe() {
+      axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
+            .then(response => {
+              console.log(response.data.idMeal);
+              let currentRecipe = response.data;
+              localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
+              console.log(localStorage);
+            })
+            .catch(error => console.log(error))
+    }
+
+    updateRecipe();
+
+  </script>
 </body>
 
 </html>
