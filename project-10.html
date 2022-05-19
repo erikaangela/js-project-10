@@ -25,7 +25,7 @@ https://www.themealdb.com/api.php -->
   <div class="container-fluid">
     <div class="row px-4">
       <!-- class="text-muted" -->
-      <h3 class="display-4">&#8212;Recipe for <small id="title"></small></h3>
+      <h3 class="display-4">&#8212; Recipe for <small id="title"></small></h3>
     </div>
     <div class="row">
       <img id="picture"></img>
@@ -40,10 +40,12 @@ https://www.themealdb.com/api.php -->
         </div>
       </div>
       <div class="col-sm-4 border border-dark border-1 rounded mt-4 mr-1" id="ingredients">
-        <div>
+        <div class="row">
           <h3 class="display-6">Ingredients</h3>
-          <div id="ingredient"></div>
-          <div id="measure"></div>
+        </div>
+        <div class="row">
+          <div class="col" id="ingredient"></div>
+          <div class="col" id="measure"></div>
         </div>
       </div>
     </div>
@@ -69,9 +71,34 @@ https://www.themealdb.com/api.php -->
             document.getElementById("picture").style.height = "200px";
             document.getElementById("picture").style.width = "300px";
 
+            // console.log(currentRecipe.strInstructions);
             document.getElementById("instructions").appendChild(document.createTextNode(currentRecipe.strInstructions));
 
+
             // document.getElementById("link").href = currentRecipe.strYoutube;
+
+            for (let property in currentRecipe) {
+              // console.log(`${property}: ${currentRecipe[property]}`);
+              let ul = document.createElement("ul");
+              let ulTwo = document.createElement("ul");
+              let li = document.createElement("li");
+              let liTwo = document.createElement("li");
+
+              if (property.includes("strIngredient") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
+                li.appendChild(document.createTextNode(currentRecipe[property]));
+                li.className = "list-group-item";
+                ul.appendChild(li);
+                ul.className = "list-group list-group-flush";
+                document.getElementById("ingredient").appendChild(ul);
+              }
+              if (property.includes("strMeasure") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
+                liTwo.appendChild(document.createTextNode(currentRecipe[property]));
+                liTwo.className = "list-group-item";
+                ulTwo.appendChild(liTwo);
+                ulTwo.className = "list-group list-group-flush";
+                document.getElementById("measure").appendChild(ulTwo);
+              }
+            }
 
 
             console.log(localStorage);
