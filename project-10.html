@@ -28,29 +28,47 @@ https://www.themealdb.com/api.php -->
       <h3 class="display-4">&#8212; Recipe for <small id="title"></small></h3>
     </div>
     <div class="row">
-      <img id="picture"></img>
+      <div class="col-sm-3">
+        <img id="picture"></img>
+        <figcaption>Fig.1 - <span id="caption"></span></figcaption>
+      </div>
+      <div class="col-sm-9">
+        <p>Category: <small id="category"></small></p>
+        <p>Type of cuisine: <small id="type"></small></p>
+        <!-- <p id="drink"></p> -->
+      </div>
     </div>
-    <div class="row" id="details">
+    <div class="row">
       <div class="col-sm-4 border border-dark border-1 rounded mt-4 mx-1">
-        <div id="instructions">
+        <div class="p-1">
           <h3 class="display-6">Instructions</h3>
+          <p id="instructions"></p>
         </div>
         <div>
-          <button class="btn btn-outline-secondary my-2" id="link" href="#">Video tutorial</button>
+          <a class="btn btn-outline-secondary my-2" id="link" target="_blank">Video tutorial</a>
         </div>
       </div>
       <div class="col-sm-4 border border-dark border-1 rounded mt-4 mr-1" id="ingredients">
-        <div class="row">
+        <div class="row p-1">
           <h3 class="display-6">Ingredients</h3>
         </div>
         <div class="row">
           <div class="col" id="ingredient"></div>
-          <div class="col" id="measure"></div>
+          <div class="col" id="measurement"></div>
         </div>
       </div>
     </div>
+    <div class="row footer">
+      <div class="col-sm-6">
+        <p>Tags: <small id="tags"></small></p>
+        <p><a id="source">Source</a></p>
+      </div>
+      <div class="col-sm-6">
+        <p id="dateMod"></p>
+      </div>
+    </div>
     <div class="row d-sm-inline-flex p-2" id="new-recipe">
-      <button class="btn btn-outline-info">Find a different recipe</button>
+      <button class="btn btn-outline-info" onclick="getNewRecipe()">Find a different recipe</button>
     </div>
   </div>
 
@@ -63,19 +81,25 @@ https://www.themealdb.com/api.php -->
     axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
           .then((response) => {
             let currentRecipe = response.data.meals[0];
+            let picture = document.getElementById("picture");
             localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
 
             document.getElementById("title").innerText = currentRecipe.strMeal;
 
-            document.getElementById("picture").src = currentRecipe.strMealThumb;
-            document.getElementById("picture").style.height = "200px";
-            document.getElementById("picture").style.width = "300px";
+            picture.src = currentRecipe.strMealThumb;
+            picture.alt = currentRecipe.strMeal;
+            document.getElementById("caption").innerText = currentRecipe.strMeal;
+            picture.style.height = "200px";
+            picture.style.width = "300px";
 
-            // console.log(currentRecipe.strInstructions);
-            document.getElementById("instructions").appendChild(document.createTextNode(currentRecipe.strInstructions));
 
+            document.getElementById("category").innerText = currentRecipe.strCategory;
+            document.getElementById("type").innerText = currentRecipe.strArea;
+            // document.getElementById("drink").innerText = currentRecipe.strDrinkAlternate;
 
-            // document.getElementById("link").href = currentRecipe.strYoutube;
+            document.getElementById("instructions").innerText = currentRecipe.strInstructions;
+
+            document.getElementById("link").href = currentRecipe.strYoutube;
 
             for (let property in currentRecipe) {
               // console.log(`${property}: ${currentRecipe[property]}`);
@@ -96,8 +120,15 @@ https://www.themealdb.com/api.php -->
                 liTwo.className = "list-group-item";
                 ulTwo.appendChild(liTwo);
                 ulTwo.className = "list-group list-group-flush";
-                document.getElementById("measure").appendChild(ulTwo);
+                document.getElementById("measurement").appendChild(ulTwo);
               }
+
+              if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
+                document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
+              }
+
+              document.getElementById("source").href = currentRecipe.strSource;
+              document.getElementById("dateMod").innerText = currentRecipe.dateModified;
             }
 
 
@@ -105,6 +136,9 @@ https://www.themealdb.com/api.php -->
           })
           .catch(error => console.log(error))
 
+    function getNewRecipe() {
+
+    }
 
   </script>
 </body>
