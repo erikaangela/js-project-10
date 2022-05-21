@@ -52,8 +52,8 @@ https://www.themealdb.com/api.php -->
         <div class="row p-1">
           <h3 class="display-6">Ingredients</h3>
         </div>
-        <div class="row">
-          <div class="col-sm-6" id="ingredient"></div>
+        <div class="row" id="itemsList">
+          <!-- <div class="col-sm-6" id="ingredient"></div> -->
           <div class="col-sm-6" id="measurement"></div>
         </div>
       </div>
@@ -74,23 +74,9 @@ https://www.themealdb.com/api.php -->
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    /* id, meal name, drink alternate, category, type of cuisine, instructions, thumb img, tags, youtube, ingredient 1 - measure 1, source, img source, date modified*/
+    /* Available in TheMealDB API: id, meal name, drink alternate, category, type of cuisine, instructions, thumb img, tags, youtube, ingredient 1 - measure 1, source, img source, date modified*/
 
     // localStorage.clear();
-    let storedRecipe = JSON.parse(localStorage.getItem("currentRecipe")) || [];
-    let currentRecipe;
-
-    function storeRecipe() {
-      axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
-            .then((response) => {
-              let currentRecipe = response.data.meals[0];
-              localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
-              console.log(localStorage);
-            })
-            .catch(error => console.log(error))
-    }
-
-    storeRecipe();
 
     function renderRecipe() {
       axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
@@ -122,6 +108,16 @@ https://www.themealdb.com/api.php -->
                 let ulTwo = document.createElement("ul");
                 let li = document.createElement("li");
                 let liTwo = document.createElement("li");
+
+                let ingredientList = document.createElement("div");
+                ingredientList.className = "col-sm-6";
+                ingredientList.id = "ingredient";
+                document.getElementById("itemsList").appendChild(ingredientList);
+
+                let measurementList = document.createElement("div");
+                measurementList.className = "col-sm-6";
+                measurementList.id = "measurement";
+                document.getElementById("itemsList").appendChild(measurementList);
 
                 if (property.includes("strIngredient") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
                   li.appendChild(document.createTextNode(currentRecipe[property]));
@@ -158,9 +154,33 @@ https://www.themealdb.com/api.php -->
             .catch(error => console.log(error))
     }
 
+    renderRecipe();
 
     function getNewRecipe() {
+      document.getElementById("title").innerText = "";
 
+      let picture = document.getElementById("picture");
+      picture.src = "";
+      picture.alt = "";
+      document.getElementById("caption").innerText = "";
+
+      document.getElementById("category").innerText = "";
+      document.getElementById("type").innerText = "";
+
+      document.getElementById("ingredient").remove();
+      document.getElementById("measurement").remove();
+
+      document.getElementById("instructions").innerText = "";
+
+      document.getElementById("link").href = "";
+
+      document.getElementById("tags").innerText = "";
+
+      document.getElementById("source").href = "";
+
+      document.getElementById("dateMod").innerText = "";
+
+      renderRecipe();
     }
 
   </script>
