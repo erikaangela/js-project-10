@@ -23,16 +23,16 @@ https://www.themealdb.com/api.php -->
 
 <body>
   <div class="container-fluid">
-    <div class="row px-4">
+    <div class="row px-4 pb-1">
       <!-- class="text-muted" -->
       <h3 class="display-4">&#8212; Recipe for <small id="title"></small></h3>
     </div>
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-3 pb-1">
         <img id="picture"></img>
         <figcaption>Fig.1 - <span id="caption"></span></figcaption>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-9 pl-1">
         <p>Category: <small id="category"></small></p>
         <p>Type of cuisine: <small id="type"></small></p>
         <!-- <p id="drink"></p> -->
@@ -44,7 +44,7 @@ https://www.themealdb.com/api.php -->
           <h3 class="display-6">Instructions</h3>
           <p id="instructions"></p>
         </div>
-        <div>
+        <div class="mb-1">
           <a class="btn btn-outline-secondary my-2" id="link" target="_blank">Video tutorial</a>
         </div>
       </div>
@@ -53,13 +53,13 @@ https://www.themealdb.com/api.php -->
           <h3 class="display-6">Ingredients</h3>
         </div>
         <div class="row">
-          <div class="col" id="ingredient"></div>
-          <div class="col" id="measurement"></div>
+          <div class="col-sm-6" id="ingredient"></div>
+          <div class="col-sm-6" id="measurement"></div>
         </div>
       </div>
     </div>
     <div class="row footer">
-      <div class="col-sm-6">
+      <div class="col-sm-6 m-1">
         <p>Tags: <small id="tags"></small></p>
         <p><a id="source">Source</a></p>
       </div>
@@ -77,64 +77,87 @@ https://www.themealdb.com/api.php -->
     /* id, meal name, drink alternate, category, type of cuisine, instructions, thumb img, tags, youtube, ingredient 1 - measure 1, source, img source, date modified*/
 
     // localStorage.clear();
+    let storedRecipe = JSON.parse(localStorage.getItem("currentRecipe")) || [];
+    let currentRecipe;
 
-    axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
-          .then((response) => {
-            let currentRecipe = response.data.meals[0];
-            let picture = document.getElementById("picture");
-            localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
+    function storeRecipe() {
+      axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
+            .then((response) => {
+              let currentRecipe = response.data.meals[0];
+              localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
+              console.log(localStorage);
+            })
+            .catch(error => console.log(error))
+    }
 
-            document.getElementById("title").innerText = currentRecipe.strMeal;
+    storeRecipe();
 
-            picture.src = currentRecipe.strMealThumb;
-            picture.alt = currentRecipe.strMeal;
-            document.getElementById("caption").innerText = currentRecipe.strMeal;
-            picture.style.height = "200px";
-            picture.style.width = "300px";
+    function renderRecipe() {
+      axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
+            .then((response) => {
+              let currentRecipe = response.data.meals[0];
+              localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
+
+              document.getElementById("title").innerText = currentRecipe.strMeal;
+
+              let picture = document.getElementById("picture");
+              picture.src = currentRecipe.strMealThumb;
+              picture.alt = currentRecipe.strMeal;
+              document.getElementById("caption").innerText = currentRecipe.strMeal;
+              picture.style.height = "250px";
+              picture.style.width = "300px";
 
 
-            document.getElementById("category").innerText = currentRecipe.strCategory;
-            document.getElementById("type").innerText = currentRecipe.strArea;
-            // document.getElementById("drink").innerText = currentRecipe.strDrinkAlternate;
+              document.getElementById("category").innerText = currentRecipe.strCategory;
+              document.getElementById("type").innerText = currentRecipe.strArea;
+              // document.getElementById("drink").innerText = currentRecipe.strDrinkAlternate;
 
-            document.getElementById("instructions").innerText = currentRecipe.strInstructions;
+              document.getElementById("instructions").innerText = currentRecipe.strInstructions;
 
-            document.getElementById("link").href = currentRecipe.strYoutube;
+              document.getElementById("link").href = currentRecipe.strYoutube;
 
-            for (let property in currentRecipe) {
-              // console.log(`${property}: ${currentRecipe[property]}`);
-              let ul = document.createElement("ul");
-              let ulTwo = document.createElement("ul");
-              let li = document.createElement("li");
-              let liTwo = document.createElement("li");
+              for (let property in currentRecipe) {
+                // console.log(`${property}: ${currentRecipe[property]}`);
+                let ul = document.createElement("ul");
+                let ulTwo = document.createElement("ul");
+                let li = document.createElement("li");
+                let liTwo = document.createElement("li");
 
-              if (property.includes("strIngredient") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
-                li.appendChild(document.createTextNode(currentRecipe[property]));
-                li.className = "list-group-item";
-                ul.appendChild(li);
-                ul.className = "list-group list-group-flush";
-                document.getElementById("ingredient").appendChild(ul);
+                if (property.includes("strIngredient") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
+                  li.appendChild(document.createTextNode(currentRecipe[property]));
+                  li.className = "list-group-item";
+
+                  ul.appendChild(li);
+                  ul.className = "list-group list-group-flush";
+                  document.getElementById("ingredient").appendChild(ul);
+                }
+                if (property.includes("strMeasure") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
+                  liTwo.appendChild(document.createTextNode(currentRecipe[property]));
+                  liTwo.className = "list-group-item";
+
+                  ulTwo.appendChild(liTwo);
+                  ulTwo.className = "list-group list-group-flush";
+                  document.getElementById("measurement").appendChild(ulTwo);
+                }
+
+                if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
+                  document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
+                } else {
+                  document.getElementById("tags").innerText = "N/A";
+                }
+
+                document.getElementById("source").href = currentRecipe.strSource;
+                document.getElementById("source").target = "_blank";
+
+                document.getElementById("dateMod").innerText = currentRecipe.dateModified;
               }
-              if (property.includes("strMeasure") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
-                liTwo.appendChild(document.createTextNode(currentRecipe[property]));
-                liTwo.className = "list-group-item";
-                ulTwo.appendChild(liTwo);
-                ulTwo.className = "list-group list-group-flush";
-                document.getElementById("measurement").appendChild(ulTwo);
-              }
-
-              if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
-                document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
-              }
-
-              document.getElementById("source").href = currentRecipe.strSource;
-              document.getElementById("dateMod").innerText = currentRecipe.dateModified;
-            }
 
 
-            console.log(localStorage);
-          })
-          .catch(error => console.log(error))
+              console.log(localStorage);
+            })
+            .catch(error => console.log(error))
+    }
+
 
     function getNewRecipe() {
 
