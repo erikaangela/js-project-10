@@ -82,64 +82,89 @@ https://www.themealdb.com/api.php -->
 
 
     function renderRecipe() {
+
       axios.get('https://www.themealdb.com/api/json/v1/1/random.php')
           .then((response) => {
             let currentRecipe = response.data.meals[0];
             localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
 
 
-            document.getElementById("title").innerText = currentRecipe.strMeal;
-
-
-            let picture = document.getElementById("picture");
-            picture.src = currentRecipe.strMealThumb;
-            picture.alt = currentRecipe.strMeal;
-            document.getElementById("caption").innerText = currentRecipe.strMeal;
-            picture.style.height = "250px";
-            picture.style.width = "300px";
-
-
-            document.getElementById("category").innerText = currentRecipe.strCategory;
-            document.getElementById("type").innerText = currentRecipe.strArea;
-
-
-            document.getElementById("instructions").innerText = currentRecipe.strInstructions;
-
-
-            document.getElementById("link").href = currentRecipe.strYoutube;
-
-
-            let arrayOfIngredients = [];
-
-            for(let i = 0; i < 21; i++) {
-              const individualIngredients = currentRecipe["strIngredient" + i];
-              const individualMeasures = currentRecipe["strMeasure" + i];
-
-              if(individualIngredients) {
-                arrayOfIngredients.push(individualIngredients + " &#8212; " + individualMeasures);
-              };
+            function setTitle(currentRecipe) {
+              document.getElementById("title").innerText = currentRecipe.strMeal;
             }
 
-            itemsList.innerHTML = "<li>" + arrayOfIngredients.join("</li><li>"); + "</li>";
+
+            function setPicture(currentRecipe) {
+              let picture = document.getElementById("picture");
+              picture.src = currentRecipe.strMealThumb;
+              picture.alt = currentRecipe.strMeal;
+              document.getElementById("caption").innerText = currentRecipe.strMeal;
+              picture.style.height = "250px";
+              picture.style.width = "300px";
+            }
 
 
-            for (let property in currentRecipe) {
-              // console.log(`${property}: ${currentRecipe[property]}`);
-              if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
-                document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
-              } else {
-                document.getElementById("tags").innerText = "N/A";
+            function setDetails(currentRecipe) {
+              document.getElementById("category").innerText = currentRecipe.strCategory;
+              document.getElementById("type").innerText = currentRecipe.strArea;
+            }
+
+
+            function setInstructions(currentRecipe) {
+              document.getElementById("instructions").innerText = currentRecipe.strInstructions;
+            }
+
+
+            function setVideoLink(currentRecipe) {
+              document.getElementById("link").href = currentRecipe.strYoutube;
+            }
+
+
+            function setIngredientList(currentRecipe) {
+              let arrayOfIngredients = [];
+
+              for(let i = 0; i < 21; i++) {
+                const individualIngredients = currentRecipe["strIngredient" + i];
+                const individualMeasures = currentRecipe["strMeasure" + i];
+
+                if(individualIngredients) {
+                  arrayOfIngredients.push(individualIngredients + " &#8212; " + individualMeasures);
+                };
               }
 
+              itemsList.innerHTML = "<li>" + arrayOfIngredients.join("</li><li>"); + "</li>";
+            }
 
+
+            function setTags(currentRecipe) {
+              for (let property in currentRecipe) {
+                // console.log(`${property}: ${currentRecipe[property]}`);
+                if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
+                  document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
+                } else {
+                  document.getElementById("tags").innerText = "N/A";
+                }
+              }
+            }
+
+
+            function setSourceLink(currentRecipe) {
               document.getElementById("source").href = currentRecipe.strSource;
-
-
               document.getElementById("source").target = "_blank";
             }
 
 
-            console.log(localStorage);
+
+            setTitle(currentRecipe);
+            setPicture(currentRecipe);
+            setDetails(currentRecipe);
+            setInstructions(currentRecipe);
+            setVideoLink(currentRecipe);
+            setIngredientList(currentRecipe);
+            setTags(currentRecipe);
+            setSourceLink(currentRecipe);
+            // console.log(localStorage);
+
           })
           .catch(error => console.log(error))
     }
@@ -148,24 +173,53 @@ https://www.themealdb.com/api.php -->
 
 
     function getNewRecipe() {
-      document.getElementById("title").innerText = "";
 
-      let picture = document.getElementById("picture");
-      picture.src = "";
-      picture.alt = "";
-      document.getElementById("caption").innerText = "";
+      function resetTitle() {
+        document.getElementById("title").innerText = "";
+      }
 
-      document.getElementById("category").innerText = "";
-      document.getElementById("type").innerText = "";
 
-      document.getElementById("instructions").innerText = "";
+      function resetPicture() {
+        let picture = document.getElementById("picture");
+        picture.src = "";
+        picture.alt = "";
+        document.getElementById("caption").innerText = "";
+      }
 
-      document.getElementById("link").href = "";
 
-      document.getElementById("tags").innerText = "";
+      function resetDetails() {
+        document.getElementById("category").innerText = "";
+        document.getElementById("type").innerText = "";
+      }
 
-      document.getElementById("source").href = "";
 
+      function resetInstructions() {
+        document.getElementById("instructions").innerText = "";
+      }
+
+
+      function resetVideoLink() {
+        document.getElementById("link").href = "";
+      }
+
+
+      function resetTags() {
+        document.getElementById("tags").innerText = "";
+      }
+
+
+      function resetSource() {
+        document.getElementById("source").href = "";
+      }
+      
+
+      resetTitle();
+      resetPicture();
+      resetDetails();
+      resetInstructions();
+      resetVideoLink();
+      resetTags();
+      resetSource();
 
       renderRecipe();
     }
