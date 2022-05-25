@@ -39,7 +39,9 @@ https://www.themealdb.com/api.php -->
       <div class="col-sm-9 pl-1">
         <p>Category: <small id="category"></small></p>
         <p>Type of cuisine: <small id="type"></small></p>
-        <!-- <p id="drink"></p> -->
+        <div class="row d-sm-inline-flex p-2" id="new-recipe">
+          <button class="btn btn-outline-info" onclick="getNewRecipe()">Find a different recipe</button>
+        </div>
       </div>
     </div>
 
@@ -47,7 +49,7 @@ https://www.themealdb.com/api.php -->
       <div class="col-sm-4 border border-dark border-1 rounded mt-4 mx-1">
         <div class="p-1">
           <h3 class="display-6">Instructions</h3>
-          <p id="instructions"></p>
+          <p id="instructions" class="p-1 m-2"></p>
         </div>
         <div class="mb-1 text-center">
           <a class="btn btn-outline-secondary my-2" id="link" target="_blank">Video tutorial</a>
@@ -57,7 +59,7 @@ https://www.themealdb.com/api.php -->
         <div class="row p-1">
           <h3 class="display-6">Ingredients</h3>
         </div>
-        <div class="row d-flex flex-nowrap" id="itemsList">
+        <div class="row p-1 m-2" id="itemsList">
         </div>
       </div>
     </div>
@@ -67,13 +69,6 @@ https://www.themealdb.com/api.php -->
         <p>Tags: <small id="tags"></small></p>
         <p><a id="source">Source</a></p>
       </div>
-      <div class="col-sm-6">
-        <p id="dateMod"></p>
-      </div>
-    </div>
-
-    <div class="row d-sm-inline-flex p-2" id="new-recipe">
-      <button class="btn btn-outline-info" onclick="getNewRecipe()">Find a different recipe</button>
     </div>
 
   </div>
@@ -92,7 +87,9 @@ https://www.themealdb.com/api.php -->
             let currentRecipe = response.data.meals[0];
             localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
 
+
             document.getElementById("title").innerText = currentRecipe.strMeal;
+
 
             let picture = document.getElementById("picture");
             picture.src = currentRecipe.strMealThumb;
@@ -101,59 +98,46 @@ https://www.themealdb.com/api.php -->
             picture.style.height = "250px";
             picture.style.width = "300px";
 
+
             document.getElementById("category").innerText = currentRecipe.strCategory;
             document.getElementById("type").innerText = currentRecipe.strArea;
-            // document.getElementById("drink").innerText = currentRecipe.strDrinkAlternate;
+
 
             document.getElementById("instructions").innerText = currentRecipe.strInstructions;
 
+
             document.getElementById("link").href = currentRecipe.strYoutube;
+
+
+            let arrayOfIngredients = [];
+
+            for(let i = 0; i < 21; i++) {
+              const individualIngredients = currentRecipe["strIngredient" + i];
+              const individualMeasures = currentRecipe["strMeasure" + i];
+
+              if(individualIngredients) {
+                arrayOfIngredients.push(individualIngredients + " &#8212; " + individualMeasures);
+              };
+            }
+
+            itemsList.innerHTML = "<li>" + arrayOfIngredients.join("</li><li>"); + "</li>";
+
 
             for (let property in currentRecipe) {
               // console.log(`${property}: ${currentRecipe[property]}`);
-              let ul = document.createElement("ul");
-              let ulTwo = document.createElement("ul");
-              let li = document.createElement("li");
-              let liTwo = document.createElement("li");
-
-              let ingredientList = document.createElement("div");
-              ingredientList.className = "col-sm-6";
-              ingredientList.id = "ingredient";
-              document.getElementById("itemsList").appendChild(ingredientList);
-
-              let measurementList = document.createElement("div");
-              measurementList.className = "col-sm-6";
-              measurementList.id = "measurement";
-              document.getElementById("itemsList").appendChild(measurementList);
-
-              if (property.includes("strIngredient") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
-                li.appendChild(document.createTextNode(currentRecipe[property]));
-                li.className = "list-group-item";
-
-                ul.appendChild(li);
-                ul.className = "list-group list-group-flush";
-                document.getElementById("ingredient").appendChild(ul);
-              }
-              if (property.includes("strMeasure") && currentRecipe[property] !== "" && currentRecipe[property] !== null) {
-                liTwo.appendChild(document.createTextNode(currentRecipe[property]));
-                liTwo.className = "list-group-item";
-
-                ulTwo.appendChild(liTwo);
-                ulTwo.className = "list-group list-group-flush";
-                document.getElementById("measurement").appendChild(ulTwo);
-              }
-
               if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
                 document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
               } else {
                 document.getElementById("tags").innerText = "N/A";
               }
 
-              document.getElementById("source").href = currentRecipe.strSource;
-              document.getElementById("source").target = "_blank";
 
-              document.getElementById("dateMod").innerText = currentRecipe.dateModified;
+              document.getElementById("source").href = currentRecipe.strSource;
+
+
+              document.getElementById("source").target = "_blank";
             }
+
 
             console.log(localStorage);
           })
@@ -174,9 +158,6 @@ https://www.themealdb.com/api.php -->
       document.getElementById("category").innerText = "";
       document.getElementById("type").innerText = "";
 
-      document.getElementById("ingredient").remove();
-      document.getElementById("measurement").remove();
-
       document.getElementById("instructions").innerText = "";
 
       document.getElementById("link").href = "";
@@ -184,8 +165,6 @@ https://www.themealdb.com/api.php -->
       document.getElementById("tags").innerText = "";
 
       document.getElementById("source").href = "";
-
-      document.getElementById("dateMod").innerText = "";
 
 
       renderRecipe();
