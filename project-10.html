@@ -88,73 +88,6 @@ https://www.themealdb.com/api.php -->
             let currentRecipe = response.data.meals[0];
             localStorage.setItem("currentRecipe", JSON.stringify(currentRecipe));
 
-
-            function setTitle(currentRecipe) {
-              document.getElementById("title").innerText = currentRecipe.strMeal;
-            }
-
-
-            function setPicture(currentRecipe) {
-              let picture = document.getElementById("picture");
-              picture.src = currentRecipe.strMealThumb;
-              picture.alt = currentRecipe.strMeal;
-              document.getElementById("caption").innerText = currentRecipe.strMeal;
-              picture.style.height = "250px";
-              picture.style.width = "300px";
-            }
-
-
-            function setDetails(currentRecipe) {
-              document.getElementById("category").innerText = currentRecipe.strCategory;
-              document.getElementById("type").innerText = currentRecipe.strArea;
-            }
-
-
-            function setInstructions(currentRecipe) {
-              document.getElementById("instructions").innerText = currentRecipe.strInstructions;
-            }
-
-
-            function setVideoLink(currentRecipe) {
-              document.getElementById("link").href = currentRecipe.strYoutube;
-            }
-
-
-            function setIngredientList(currentRecipe) {
-              let arrayOfIngredients = [];
-
-              for(let i = 0; i < 21; i++) {
-                const individualIngredients = currentRecipe["strIngredient" + i];
-                const individualMeasures = currentRecipe["strMeasure" + i];
-
-                if(individualIngredients) {
-                  arrayOfIngredients.push(individualIngredients + " &#8212; " + individualMeasures);
-                };
-              }
-
-              itemsList.innerHTML = "<li>" + arrayOfIngredients.join("</li><li>"); + "</li>";
-            }
-
-
-            function setTags(currentRecipe) {
-              for (let property in currentRecipe) {
-                // console.log(`${property}: ${currentRecipe[property]}`);
-                if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
-                  document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
-                } else {
-                  document.getElementById("tags").innerText = "N/A";
-                }
-              }
-            }
-
-
-            function setSourceLink(currentRecipe) {
-              document.getElementById("source").href = currentRecipe.strSource;
-              document.getElementById("source").target = "_blank";
-            }
-
-
-
             setTitle(currentRecipe);
             setPicture(currentRecipe);
             setDetails(currentRecipe);
@@ -172,12 +105,77 @@ https://www.themealdb.com/api.php -->
     renderRecipe();
 
 
+    function setTitle(currentRecipe) {
+      document.getElementById("title").innerText = currentRecipe.strMeal;
+    }
+
+
+    function setPicture(currentRecipe) {
+      let picture = document.getElementById("picture");
+      picture.src = currentRecipe.strMealThumb;
+      picture.alt = currentRecipe.strMeal;
+      document.getElementById("caption").innerText = currentRecipe.strMeal;
+      picture.style.height = "250px";
+      picture.style.width = "300px";
+    }
+
+
+    function setDetails(currentRecipe) {
+      document.getElementById("category").innerText = currentRecipe.strCategory;
+      document.getElementById("type").innerText = currentRecipe.strArea;
+    }
+
+
+    function setInstructions(currentRecipe) {
+      document.getElementById("instructions").innerText = currentRecipe.strInstructions;
+    }
+
+
+    function setVideoLink(currentRecipe) {
+      document.getElementById("link").href = currentRecipe.strYoutube;
+    }
+
+
+    function setIngredientList(currentRecipe) {
+      let arrayOfIngredients = [];
+
+      for(let i = 0; i < 21; i++) {
+        const individualIngredients = currentRecipe["strIngredient" + i];
+        const individualMeasures = currentRecipe["strMeasure" + i];
+
+        if(individualIngredients) {
+          arrayOfIngredients.push(individualIngredients + " &#8212; " + individualMeasures);
+        };
+      }
+
+      itemsList.innerHTML = "<li>" + arrayOfIngredients.join("</li><li>"); + "</li>";
+    }
+
+
+    function setTags(currentRecipe) {
+      for (let property in currentRecipe) {
+        // console.log(`${property}: ${currentRecipe[property]}`);
+        if (currentRecipe.strTags !== null && currentRecipe.strTags !== "") {
+          document.getElementById("tags").innerText = currentRecipe.strTags.split(',').join(' | ');
+        } else {
+          document.getElementById("tags").innerText = "N/A";
+        }
+      }
+    }
+
+
+    function setSourceLink(currentRecipe) {
+      document.getElementById("source").href = currentRecipe.strSource;
+      document.getElementById("source").target = "_blank";
+    }
+
+
+
     function getNewRecipe() {
 
       function resetTitle() {
         document.getElementById("title").innerText = "";
       }
-
 
       function resetPicture() {
         let picture = document.getElementById("picture");
@@ -186,32 +184,27 @@ https://www.themealdb.com/api.php -->
         document.getElementById("caption").innerText = "";
       }
 
-
       function resetDetails() {
         document.getElementById("category").innerText = "";
         document.getElementById("type").innerText = "";
       }
 
-
       function resetInstructions() {
         document.getElementById("instructions").innerText = "";
       }
-
 
       function resetVideoLink() {
         document.getElementById("link").href = "";
       }
 
-
       function resetTags() {
         document.getElementById("tags").innerText = "";
       }
 
-
       function resetSource() {
         document.getElementById("source").href = "";
       }
-      
+
 
       resetTitle();
       resetPicture();
