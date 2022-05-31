@@ -180,7 +180,7 @@ https://www.themealdb.com/api.php -->
       document.getElementById("caption").innerText = "";
     }
 
-    function resetAllExceptPicture() {
+    function resetAll() {
       document.getElementById("title").innerText = "";
       document.getElementById("category").innerText = "";
       document.getElementById("type").innerText = "";
@@ -188,12 +188,11 @@ https://www.themealdb.com/api.php -->
       document.getElementById("link").href = "";
       document.getElementById("tags").innerText = "";
       document.getElementById("source").href = "";
-
+      resetPicture();
     }
 
     function getNewRecipe() {
-      resetAllExceptPicture();
-      resetPicture();
+      resetAll();
 
       renderRecipe();
     }
