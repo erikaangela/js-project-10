@@ -80,6 +80,8 @@ https://www.themealdb.com/api.php -->
 
     // localStorage.clear();
 
+    // (The main takeaway to note here is: you should not define a function within another function.)
+
 
     function renderRecipe() {
 
@@ -171,48 +173,27 @@ https://www.themealdb.com/api.php -->
 
 
 
+    function resetPicture() {
+      let picture = document.getElementById("picture");
+      picture.src = "";
+      picture.alt = "";
+      document.getElementById("caption").innerText = "";
+    }
+
+    function resetAllExceptPicture() {
+      document.getElementById("title").innerText = "";
+      document.getElementById("category").innerText = "";
+      document.getElementById("type").innerText = "";
+      document.getElementById("instructions").innerText = "";
+      document.getElementById("link").href = "";
+      document.getElementById("tags").innerText = "";
+      document.getElementById("source").href = "";
+
+    }
+
     function getNewRecipe() {
-
-      function resetTitle() {
-        document.getElementById("title").innerText = "";
-      }
-
-      function resetPicture() {
-        let picture = document.getElementById("picture");
-        picture.src = "";
-        picture.alt = "";
-        document.getElementById("caption").innerText = "";
-      }
-
-      function resetDetails() {
-        document.getElementById("category").innerText = "";
-        document.getElementById("type").innerText = "";
-      }
-
-      function resetInstructions() {
-        document.getElementById("instructions").innerText = "";
-      }
-
-      function resetVideoLink() {
-        document.getElementById("link").href = "";
-      }
-
-      function resetTags() {
-        document.getElementById("tags").innerText = "";
-      }
-
-      function resetSource() {
-        document.getElementById("source").href = "";
-      }
-
-
-      resetTitle();
+      resetAllExceptPicture();
       resetPicture();
-      resetDetails();
-      resetInstructions();
-      resetVideoLink();
-      resetTags();
-      resetSource();
 
       renderRecipe();
     }
