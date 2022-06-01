@@ -1,4 +1,4 @@
-# Create a Recipe App
+# Recipe App
 
 ### How the app works
 This project obtains data (e.g., id, meal name, category, instructions, tags, ingredients) from an API and primarily uses JavaScript to section each piece of data into its respective place on the page. When the page loads, a random recipe is displayed with a title, picture, instructions, ingredient list, and other details. The user will find hyperlinks to the recipe's source and YouTube tutorial, as well as a button to generate a new random recipe.
