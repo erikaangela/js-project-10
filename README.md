@@ -10,3 +10,8 @@ Be able to integrate data from the ["TheMealDB"](https://www.themealdb.com/api.p
 
 ### Technologies used
 JavaScript, HTML, CSS, APIs
+
+## Quick Start
+
+* First, clone the app onto your local machine using ```` git clone ````
+* Second, click on the HTML file to open it in your browser.
